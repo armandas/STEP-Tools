@@ -1,9 +1,16 @@
 $(document).ready(function()
 {
-	$('#drop_zone').on('click', function()
+	$(window).on('click', function(event)
 	{
 		$('input:file').click();
 	});
+
+	/* Prevent the simulated click from propagating back to window */
+	$('input:file').on('click', function(event)
+	{
+		event.stopPropagation();
+	});
+
 
 	$(window).on('dragover', function(event)
 	{
@@ -15,8 +22,17 @@ $(document).ready(function()
 	{
 		event.stopPropagation();
 		event.preventDefault();
+
+		$('#text').css('border-style', 'solid');
 	});
 
+	$(window).on('dragleave', function(event)
+	{
+		event.stopPropagation();
+		event.preventDefault();
+
+		$('#text').css('border-style', 'dotted');
+	});
 
 	$(window).on('drop', function(event)
 	{
@@ -30,38 +46,40 @@ $(document).ready(function()
 	{
 		addFiles(event.target.files);
 	});
-});
 
-$(document).on('filesLoaded', function()
-{
-	$('.file').on('click', function()
+	$('#list').on('click', '.file', function()
 	{
+		$('#properties form').hide();
 		$('.selected').removeClass('selected');
 		$(this).addClass('selected');
 		$('#title').text($(this).text());
+		$('#file' + $(this).data('file')).show();
 		$('#properties').show();
 	});
 
-	$('#presuf').on('click', function(event)
+	$('#properties').on('click', '#presuf', function(event)
 	{
-		if ($('input[name=prefix]').val()) {
-			$('input[name=prefix]').attr('placeholder', "PREFIX: " + $('input[name=prefix]').val());
+		console.log($(this).siblings());
+		console.log($(this).siblings('input[name=prefix]').val());
+
+		if ($(this).siblings('input[name=prefix]').val()) {
+			$(this).siblings('input[name=prefix]').attr('placeholder', "PREFIX: " + $(this).siblings('input[name=prefix]').val());
 		}
 		else {
-			$('input[name=prefix]').attr('placeholder', "PREFIX");
+			$(this).siblings('input[name=prefix]').attr('placeholder', "PREFIX");
 		}
 
-		if ($('input[name=suffix]').val()) {
-			$('input[name=suffix]').attr('placeholder', "SUFFIX: " + $('input[name=suffix]').val());
+		if ($(this).siblings('input[name=suffix]').val()) {
+			$(this).siblings('input[name=suffix]').attr('placeholder', "SUFFIX: " + $(this).siblings('input[name=suffix]').val());
 		}
 		else {
-			$('input[name=suffix]').attr('placeholder', "SUFFIX");
+			$(this).siblings('input[name=suffix]').attr('placeholder', "SUFFIX");
 		}
 
-		$('#properties form').trigger('reset');
+		$(this).parent().trigger('reset');
 	});
 
-	$('#desaturate').on('click', function()
+	$('#properties').on('click', '#desaturate', function()
 	{
 		if ($('.selected').hasClass('col')) {
 			$('.selected').removeClass('col');
@@ -75,14 +93,21 @@ $(document).on('filesLoaded', function()
 		}
 	});
 
-	$('#remove').on('click', function()
+	$('#properties').on('click', '#remove', function()
 	{
+		event.stopPropagation();
+
 		$('.selected').remove();
 		$('#properties').hide();
-		$('#desaturate').val('Remove Colours');
 
 		if ($('.file').length == 0) {
-			$('#drop_zone').show();
+			$(window).on('click', function(event)
+			{
+				$('input:file').click();
+			});
+
+			$('body').css('cursor', 'pointer');
+			$('#text').show();
 		}
 	});
 });

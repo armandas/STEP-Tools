@@ -1,8 +1,9 @@
 html, body {
-	height: 100%;
+	height: 90%;
 	margin: 0;
 	padding: 5px;
-	overflow: hidden;
+	font-family: sans-serif;
+	cursor: pointer;
 }
 
 form {
@@ -11,7 +12,7 @@ form {
 }
 
 input {
-	margin: 0;
+	margin-right: 5px;
 }
 
 input:focus {
@@ -52,22 +53,24 @@ input[type=button]:active {
 }
 
 #export {
-	width: 69%;
+	width: 65%;
 }
 
-
-#drop_zone {
-	padding: 10px;
-	height: 90%;
-	cursor: pointer;
-}
 #text {
-	position: relative;
-	top: 45%;
+ 	top: 50%;
+	left: 50%;
+	width: 600px;
+	line-height: 150px;
+	margin-top: -75px;
+	margin-left: -300px;
+	border: 10px dotted #ccc;
+	border-radius: 30px;
+	position:fixed;
 	text-align: center;
 	text-transform: uppercase;
 	color: #777;
 	font-size: 30px;
+	z-index: -1;
 }
 
 #list {
@@ -106,6 +109,9 @@ input[type=button]:active {
 	font-size: 30px;
 	cursor: pointer;
 	user-select: none;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	overflow: hidden;
 }
 
 .file.col {
